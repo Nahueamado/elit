@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calculadora de Tasación de Obras de Arte</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    margin: 0;
+    padding: 0;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh;
+  }
+  .container {
+    background: white;
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgb(0 0 0 / 0.15);
+    max-width: 420px;
+    width: 100%;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  label {
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    display: block;
+    color: #555;
+  }
+  select, input[type=number] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1.3rem;
+    border-radius: 6px;
+    border: 1.5px solid #bbb;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  select:focus, input[type=number]:focus {
+    border-color: #0057d9;
+    outline: none;
+  }
+  button {
+    background-color: #0057d9;
+    color: white;
+    font-weight: 600;
+    width: 100%;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #003ea1;
+  }
+  .result {
+    margin-top: 1.5rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #0057d9;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #0057d9;
+    border-radius: 8px;
+    background-color: #e7f3ff;
+    min-height: 3rem;
+  }
+  .footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #777;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+  <main class="container" aria-label="Calculadora de Tasación de Obras de Arte">
+    <h1>Calculadora de Tasación de Obras</h1>
+    <form id="calculoForm">
+      <label for="size">Tamaño de la obra:</label>
+      <select id="size" name="size" required>
+        <option value="">Seleccione tamaño</option>
+        <option value="13x18" data-price="2500" data-hours="2">13x18 cm</option>
+        <option value="20x25" data-price="4000" data-hours="3">20x25 cm</option>
+        <option value="24x30" data-price="6000" data-hours="4">24x30 cm</option>
+        <option value="30x40" data-price="9000" data-hours="5">30x40 cm</option>
+        <option value="40x60" data-price="12000" data-hours="7">40x60 cm</option>
+        <option value="50x70" data-price="15000" data-hours="9">50x70 cm</option>
+        <option value="60x90" data-price="20000" data-hours="10">60x90 cm</option>
+        <option value="70x100" data-price="25000" data-hours="13">70x100 cm</option>
+      </select>
+
+      <label for="technique">Técnica de pintura:</label>
+      <select id="technique" name="technique" required>
+        <option value="">Seleccione técnica</option>
+        <option value="acrilico" data-price="2500">Acrílico</option>
+        <option value="oleo" data-price="10000">Óleo</option>
+      </select>
+
+      <button type="submit" id="calcBtn">Calcular Precio</button>
+    </form>
+
+    <div id="result" class="result" role="alert" aria-live="polite"></div>
+
+    <div class="footer">El precio final incluye un recargo del 50% adicional sobre el cálculo base.</div>
+  </main>
+
+  <script>
+    document.getElementById('calculoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const sizeSelect = document.getElementById('size');
+      const techniqueSelect = document.getElementById('technique');
+      const resultDiv = document.getElementById('result');
+
+      const selectedSizeOption = sizeSelect.selectedOptions[0];
+      const selectedTechniqueOption = techniqueSelect.selectedOptions[0];
+
+      const lienzoPrice = parseFloat(selectedSizeOption.getAttribute('data-price'));
+      const hours = parseFloat(selectedSizeOption.getAttribute('data-hours'));
+      const techniquePrice = parseFloat(selectedTechniqueOption.getAttribute('data-price'));
+
+      if (isNaN(lienzoPrice) || isNaN(hours) || isNaN(techniquePrice)) {
+        resultDiv.textContent = 'Por favor complete todos los campos correctamente.';
+        return;
+      }
+
+      const pricePerHour = 5000; // Precio por hora en ARS
+
+      const basePrice = lienzoPrice + techniquePrice + (hours * pricePerHour);
+
+      const finalPrice = basePrice * 1.5;
+
+      resultDiv.textContent = `Precio estimado de la obra: $${finalPrice.toFixed(2)} ARS`;
+    });
+  </script>
+</body>
+</html>
+
